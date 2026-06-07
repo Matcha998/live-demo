@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>直播购物模拟</title>
+<style>
+* {margin:0;padding:0;box-sizing:border-box;}
+body {background:#f5f5f5; font-family:微软雅黑;}
+.live-wrap {max-width:800px;margin:20px auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px #0002;}
+video {width:100%;display:block;}
+.host-bar {padding:12px 15px;border-bottom:1px #eee solid;display:flex;align-items:center;}
+.avatar {width:40px;height:40px;border-radius:50%;background:#ff6700;color:#fff;text-align:center;line-height:40px;font-weight:bold;margin-right:10px;}
+.host-name {font-size:16px;font-weight:bold;}
+.live-tag {background:red;color:#fff;font-size:12px;padding:2px 6px;border-radius:4px;margin-left:8px;}
+
+/* 商品弹窗：默认隐藏 */
+.product-pop {
+  position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+  width:90%; max-width:400px; background:#fff; border-radius:12px;
+  box-shadow:0 5px 20px #0003; padding:15px; display:none; z-index:999;
+}
+.product-pop.show {display:block;}
+.p-title {font-size:16px;font-weight:bold;margin-bottom:8px;}
+.p-price {color:#ff4400;font-size:18px;font-weight:bold;margin-bottom:10px;}
+.p-btn {display:block;width:100%;padding:12px;background:#ff6700;color:#fff;text-align:center;border-radius:8px;text-decoration:none;font-weight:bold;}
+</style>
+</head>
+<body>
+
+<div class="live-wrap">
+  <video id="v" controls>
+    <source src="https://www.w3school.com.cn/i/movie.mp4" type="video/mp4">
+  </video>
+  <div class="host-bar">
+    <div class="avatar">主</div>
+    <div>
+      <div class="host-name">好物主播</div>
+      <span class="live-tag">直播中</span>
+    </div>
+  </div>
+</div>
+
+<!-- 商品弹窗 -->
+<div class="product-pop" id="pop">
+  <div class="p-title">【主播推荐】纯棉百搭T恤</div>
+  <div class="p-price">¥59.9</div>
+  <a href="https://你的商品详情页链接" target="_blank" class="p-btn">点击查看商品详情</a>
+</div>
+
+<script>
+const v=document.getElementById('v');
+const pop=document.getElementById('pop');
+
+// 5秒弹出，15秒后隐藏
+v.addEventListener('timeupdate',()=>{
+  if(v.currentTime>=5 && v.currentTime<15){
+    pop.classList.add('show');
+  }else{
+    pop.classList.remove('show');
+  }
+});
+</script>
+
+</body>
+</html>
