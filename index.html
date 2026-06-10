@@ -30,7 +30,9 @@ video {width:100%;display:block;}
 
 <div class="live-wrap">
   <video id="v" controls>
-    <source src="https://www.w3school.com.cn/i/movie.mp4" type="video/mp4">
+    <!-- 已替换为你的讲解视频完整可播放链接 -->
+    <source src="https://github.com/Matcha998/live-demo/blob/main/explain%20video.mp4?raw=true" type="video/mp4">
+    您的浏览器不支持视频播放
   </video>
   <div class="host-bar">
     <div class="avatar">主</div>
@@ -41,11 +43,11 @@ video {width:100%;display:block;}
   </div>
 </div>
 
-<!-- 商品弹窗 -->
+<!-- 商品弹窗（蓝牙耳机信息+跳转你的图文详情页） -->
 <div class="product-pop" id="pop">
-  <div class="p-title">【主播推荐】纯棉百搭T恤</div>
-  <div class="p-price">¥59.9</div>
-  <a href="https://你的商品详情页链接" target="_blank" class="p-btn">点击查看商品详情</a>
+  <div class="p-title">BLT零感豆AirX升级版蓝牙耳机</div>
+  <div class="p-price">直播间专享特惠 ¥89.9</div>
+  <a href="https://Matcha998.github.io/live-demo/detail.html" target="_blank" class="p-btn">点击查看商品详情</a>
 </div>
 
 <script>
@@ -54,7 +56,7 @@ const pop=document.getElementById('pop');
 
 // 5秒弹出，15秒后隐藏
 v.addEventListener('timeupdate',()=>{
-  if(v.currentTime>=5 && v.currentTime<15){
+  if(v.currentTime>=5 && v.currentTime<30){
     pop.classList.add('show');
   }else{
     pop.classList.remove('show');
