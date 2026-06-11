@@ -14,7 +14,7 @@ video {width:100%;display:block;}
 .host-name {font-size:16px;font-weight:bold;}
 .live-tag {background:red;color:#fff;font-size:12px;padding:2px 6px;border-radius:4px;margin-left:8px;}
 
-/* 底部商品弹窗（原有） */
+/* 底部商品弹窗 */
 .product-pop {
   position:fixed; 
   bottom:25px; 
@@ -48,7 +48,32 @@ video {width:100%;display:block;}
 }
 .p-title {font-size:18px;font-weight:bold;margin-bottom:8px;line-height:1.4;}
 .p-price {color:#ff4400;font-size:20px;font-weight:bold;}
-.p-btn {display:block;width:100%;padding:14px;background:#ff6700;color:#fff;text-align:center;border-radius:10px;border:0;cursor:pointer;font-weight:bold;font-size:16px;}
+
+/* 新增：双按钮并排容器 */
+.btn-row {
+  display:flex;
+  gap:12px;
+}
+/* 左右两个按钮各占一半宽度 */
+.btn-half {
+  flex:1;
+  padding:14px;
+  border-radius:10px;
+  border:0;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:16px;
+}
+/* 左侧查看详情按钮 */
+.btn-detail {
+  background:#f0f0f0;
+  color:#333;
+}
+/* 右侧立即下单按钮 */
+.btn-buy {
+  background:#ff6700;
+  color:#fff;
+}
 
 /* 全屏遮罩：顶部30%透明，不遮挡视频 */
 .detail-mask {
@@ -114,7 +139,7 @@ video {width:100%;display:block;}
   </div>
 </div>
 
-<!-- 底部商品弹窗 -->
+<!-- 底部商品弹窗（按钮改为左右双栏） -->
 <div class="product-pop" id="pop">
   <div class="pop-row">
     <img class="pop-left-img" src="https://matcha998.github.io/live-demo/mainimage6.8.jpg">
@@ -123,7 +148,11 @@ video {width:100%;display:block;}
       <div class="p-price">直播间专享特惠 ¥89.9</div>
     </div>
   </div>
-  <button class="p-btn" id="openDetailBtn">点击查看完整图文商品详情</button>
+  <!-- 左右两分按钮 -->
+  <div class="btn-row">
+    <button class="btn-half btn-detail" id="openDetailBtn">点击查看完整图文商品详情</button>
+    <button class="btn-half btn-buy">立即下单</button>
+  </div>
 </div>
 
 <!-- 内嵌详情弹窗（顶部25%区域露出视频，不被遮挡） -->
@@ -153,15 +182,16 @@ v.addEventListener('timeupdate',()=>{
   }
 });
 
-// 打开详情弹窗
+// 打开详情弹窗 + 向Credamo发送点击标记
 openDetailBtn.addEventListener('click', ()=>{
   detailMask.classList.add('show');
+  window.parent.postMessage({trigger:"click_detail_btn"}, "*");
 });
 // 关闭详情弹窗
 closeDetailBtn.addEventListener('click', ()=>{
   detailMask.classList.remove('show');
 });
-// 点击遮罩灰色区域关闭弹窗（顶部透明视频区域点击无反应，不会误关）
+// 点击遮罩灰色区域关闭弹窗
 detailMask.addEventListener('click', (e)=>{
   if(e.target === detailMask){
     detailMask.classList.remove('show');
