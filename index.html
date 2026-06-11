@@ -14,27 +14,55 @@ video {width:100%;display:block;}
 .host-name {font-size:16px;font-weight:bold;}
 .live-tag {background:red;color:#fff;font-size:12px;padding:2px 6px;border-radius:4px;margin-left:8px;}
 
-/* 商品弹窗：默认隐藏 */
+/* 弹窗修改：宽度和.live-wrap容器100%等宽，与视频完全一致 */
 .product-pop {
-  position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
-  width:90%; max-width:400px; background:#fff; border-radius:12px;
-  box-shadow:0 5px 20px #0003; padding:15px; display:none; z-index:999;
+  position:fixed; 
+  bottom:25px; 
+  left:50%; 
+  transform:translateX(-50%);
+  width:calc(100% - 40px); 
+  max-width:800px; /* 和视频外层容器max-width保持一致 */
+  background:#fff; 
+  border-radius:14px;
+  box-shadow:0 5px 25px rgba(0,0,0,0.15); 
+  padding:20px; 
+  display:none; 
+  z-index:999;
 }
 .product-pop.show {display:block;}
-.p-title {font-size:16px;font-weight:bold;margin-bottom:8px;}
-.p-price {color:#ff4400;font-size:18px;font-weight:bold;margin-bottom:10px;}
-.p-btn {display:block;width:100%;padding:12px;background:#ff6700;color:#fff;text-align:center;border-radius:8px;text-decoration:none;font-weight:bold;}
+
+/* 左图+右侧文字 横向布局容器 */
+.pop-row {
+  display:flex;
+  gap:14px;
+  align-items:center;
+  margin-bottom:16px;
+}
+/* 左侧商品缩略图 */
+.pop-left-img {
+  width:90px;
+  height:90px;
+  object-fit:cover;
+  border-radius:10px;
+}
+/* 右侧文字区域 */
+.pop-right-text {
+  flex:1;
+}
+.p-title {font-size:18px;font-weight:bold;margin-bottom:8px;line-height:1.4;}
+.p-price {color:#ff4400;font-size:20px;font-weight:bold;}
+.p-btn {display:block;width:100%;padding:14px;background:#ff6700;color:#fff;text-align:center;border-radius:10px;text-decoration:none;font-weight:bold;font-size:16px;}
 </style>
 </head>
 <body>
 
 <div class="live-wrap">
-  <video id="v" controls>
+  <video id="v" controls preload="auto">
     <source src="https://voluble-gumdrop-e6919a.netlify.app/explainvideo.mp4" type="video/mp4">
-    您的浏览器不支持视频播放
+    您的浏览器不支持视频播放，请更换浏览器重试
   </video>
   <div class="host-bar">
-    <div class="avatar">主</div>
+    <div class="avatar">BLT</div>
     <div>
       <div class="host-name">BLT品牌</div>
       <span class="live-tag">直播中</span>
@@ -42,18 +70,26 @@ video {width:100%;display:block;}
   </div>
 </div>
 
-<!-- 商品弹窗（蓝牙耳机信息+跳转你的图文详情页） -->
+<!-- 弹窗：左图 右商品标题价格，宽度与视频完全匹配 -->
 <div class="product-pop" id="pop">
-  <div class="p-title">BLT零感豆AirX升级版蓝牙耳机</div>
-  <div class="p-price">直播间专享特惠 ¥89.9</div>
-  <a href="https://Matcha998.github.io/live-demo/detail.html" target="_blank" class="p-btn">点击查看商品详情</a>
+  <div class="pop-row">
+    <!-- 左侧商品图片 -->
+    <img class="pop-left-img" src="https://github.com/Matcha998/live-demo/blob/main/mainimage6.8.png?raw=true">
+    <!-- 右侧标题+价格 -->
+    <div class="pop-right-text">
+      <div class="p-title">BLT零感豆AirX升级版蓝牙耳机</div>
+      <div class="p-price">直播间专享特惠 ¥89.9</div>
+    </div>
+  </div>
+  <!-- 底部通栏按钮 -->
+  <a href="https://Matcha998.github.io/live-demo/detail.html" target="_blank" class="p-btn">点击查看完整图文商品详情</a>
 </div>
 
 <script>
 const v=document.getElementById('v');
 const pop=document.getElementById('pop');
 
-// 5秒弹出，30秒后隐藏
+// 5秒弹出，15秒自动隐藏
 v.addEventListener('timeupdate',()=>{
   if(v.currentTime>=5 && v.currentTime<30){
     pop.classList.add('show');
