@@ -48,27 +48,29 @@ video {width:100%;display:block;}
 }
 .p-title {font-size:18px;font-weight:bold;margin-bottom:8px;line-height:1.4;}
 .p-price {color:#ff4400;font-size:20px;font-weight:bold;}
-.p-btn {display:block;width:100%;padding:14px;background:#ff6700;color:#fff;text-align:center;border-radius:10px;text-decoration:none;font-weight:bold;font-size:16px;border:0;cursor:pointer;}
+.p-btn {display:block;width:100%;padding:14px;background:#ff6700;color:#fff;text-align:center;border-radius:10px;border:0;cursor:pointer;font-weight:bold;font-size:16px;}
 
-/* 新增：全屏遮罩+详情内嵌弹窗 */
+/* 全屏遮罩：顶部25%透明，不遮挡视频 */
 .detail-mask {
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.6);
   z-index:9999;
   display:none;
+  background:linear-gradient(to bottom, transparent 25%, rgba(0,0,0,0.6) 25%);
 }
 .detail-mask.show {display:block;}
+
+/* 详情弹窗：仅占据下方75%可视区域，顶部留白显示视频 */
 .detail-box {
   width:92%;
   max-width:780px;
-  height:85vh;
+  height:70vh;
   background:#fff;
   border-radius:14px;
   position:absolute;
   left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
+  bottom:5vh;
+  transform:translateX(-50%);
   display:flex;
   flex-direction:column;
   overflow:hidden;
@@ -121,18 +123,16 @@ video {width:100%;display:block;}
       <div class="p-price">直播间专享特惠 ¥89.9</div>
     </div>
   </div>
-  <!-- 改为按钮，点击唤起内嵌详情，不再新开页面 -->
   <button class="p-btn" id="openDetailBtn">点击查看完整图文商品详情</button>
 </div>
 
-<!-- 新增：全屏内嵌详情弹窗（不跳新页面） -->
+<!-- 内嵌详情弹窗（顶部25%区域露出视频，不被遮挡） -->
 <div class="detail-mask" id="detailMask">
   <div class="detail-box">
     <div class="detail-top">
       <span>商品完整详情</span>
       <button class="detail-close" id="closeDetailBtn">×</button>
     </div>
-    <!-- iframe加载同仓库详情页，当前页面内展示 -->
     <iframe class="detail-iframe" src="https://Matcha998.github.io/live-demo/detail.html"></iframe>
   </div>
 </div>
@@ -153,15 +153,15 @@ v.addEventListener('timeupdate',()=>{
   }
 });
 
-// 打开内嵌详情弹窗
+// 打开详情弹窗
 openDetailBtn.addEventListener('click', ()=>{
   detailMask.classList.add('show');
 });
-// 关闭详情弹窗，返回直播页面
+// 关闭详情弹窗
 closeDetailBtn.addEventListener('click', ()=>{
   detailMask.classList.remove('show');
 });
-// 点击遮罩空白处关闭详情
+// 点击遮罩灰色区域关闭弹窗（顶部透明视频区域点击无反应，不会误关）
 detailMask.addEventListener('click', (e)=>{
   if(e.target === detailMask){
     detailMask.classList.remove('show');
