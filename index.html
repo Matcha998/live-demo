@@ -14,14 +14,14 @@ video {width:100%;display:block;}
 .host-name {font-size:16px;font-weight:bold;}
 .live-tag {background:red;color:#fff;font-size:12px;padding:2px 6px;border-radius:4px;margin-left:8px;}
 
-/* 弹窗修改：宽度和.live-wrap容器100%等宽，与视频完全一致 */
+/* 底部商品弹窗（原有） */
 .product-pop {
   position:fixed; 
   bottom:25px; 
   left:50%; 
   transform:translateX(-50%);
   width:calc(100% - 40px); 
-  max-width:800px; /* 和视频外层容器max-width保持一致 */
+  max-width:800px;
   background:#fff; 
   border-radius:14px;
   box-shadow:0 5px 25px rgba(0,0,0,0.15); 
@@ -31,27 +31,69 @@ video {width:100%;display:block;}
 }
 .product-pop.show {display:block;}
 
-/* 左图+右侧文字 横向布局容器 */
 .pop-row {
   display:flex;
   gap:14px;
   align-items:center;
   margin-bottom:16px;
 }
-/* 左侧商品缩略图 */
 .pop-left-img {
   width:90px;
   height:90px;
   object-fit:cover;
   border-radius:10px;
 }
-/* 右侧文字区域 */
 .pop-right-text {
   flex:1;
 }
 .p-title {font-size:18px;font-weight:bold;margin-bottom:8px;line-height:1.4;}
 .p-price {color:#ff4400;font-size:20px;font-weight:bold;}
-.p-btn {display:block;width:100%;padding:14px;background:#ff6700;color:#fff;text-align:center;border-radius:10px;text-decoration:none;font-weight:bold;font-size:16px;}
+.p-btn {display:block;width:100%;padding:14px;background:#ff6700;color:#fff;text-align:center;border-radius:10px;text-decoration:none;font-weight:bold;font-size:16px;border:0;cursor:pointer;}
+
+/* 新增：全屏遮罩+详情内嵌弹窗 */
+.detail-mask {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  z-index:9999;
+  display:none;
+}
+.detail-mask.show {display:block;}
+.detail-box {
+  width:92%;
+  max-width:780px;
+  height:85vh;
+  background:#fff;
+  border-radius:14px;
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.detail-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 16px;
+  border-bottom:1px solid #eee;
+}
+.detail-close {
+  background:#eee;
+  border:0;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  font-size:18px;
+  cursor:pointer;
+}
+.detail-iframe {
+  flex:1;
+  width:100%;
+  border:0;
+}
 </style>
 </head>
 <body>
@@ -70,31 +112,59 @@ video {width:100%;display:block;}
   </div>
 </div>
 
-<!-- 弹窗：左图 右商品标题价格，宽度与视频完全匹配 -->
+<!-- 底部商品弹窗 -->
 <div class="product-pop" id="pop">
   <div class="pop-row">
-    <!-- 左侧商品图片 -->
-    <img class="pop-left-img" src="https://matcha998.github.io/live-demo/mainimage6.8.jpg">
-    <!-- 右侧标题+价格 -->
+    <img class="pop-left-img" src="https://voluble-gumdrop-e6919a.netlify.app/mainimage6.8.png">
     <div class="pop-right-text">
       <div class="p-title">BLT零感豆AirX升级版蓝牙耳机</div>
       <div class="p-price">直播间专享特惠 ¥89.9</div>
     </div>
   </div>
-  <!-- 底部通栏按钮 -->
-  <a href="https://Matcha998.github.io/live-demo/detail.html" target="_blank" class="p-btn">点击查看完整图文商品详情</a>
+  <!-- 改为按钮，点击唤起内嵌详情，不再新开页面 -->
+  <button class="p-btn" id="openDetailBtn">点击查看完整图文商品详情</button>
+</div>
+
+<!-- 新增：全屏内嵌详情弹窗（不跳新页面） -->
+<div class="detail-mask" id="detailMask">
+  <div class="detail-box">
+    <div class="detail-top">
+      <span>商品完整详情</span>
+      <button class="detail-close" id="closeDetailBtn">×</button>
+    </div>
+    <!-- iframe加载同仓库详情页，当前页面内展示 -->
+    <iframe class="detail-iframe" src="https://Matcha998.github.io/live-demo/detail.html"></iframe>
+  </div>
 </div>
 
 <script>
 const v=document.getElementById('v');
 const pop=document.getElementById('pop');
+const detailMask = document.getElementById('detailMask');
+const openDetailBtn = document.getElementById('openDetailBtn');
+const closeDetailBtn = document.getElementById('closeDetailBtn');
 
-// 5秒弹出，30秒自动隐藏
+// 视频5秒弹出商品弹窗，30秒隐藏
 v.addEventListener('timeupdate',()=>{
   if(v.currentTime>=5 && v.currentTime<30){
     pop.classList.add('show');
   }else{
     pop.classList.remove('show');
+  }
+});
+
+// 打开内嵌详情弹窗
+openDetailBtn.addEventListener('click', ()=>{
+  detailMask.classList.add('show');
+});
+// 关闭详情弹窗，返回直播页面
+closeDetailBtn.addEventListener('click', ()=>{
+  detailMask.classList.remove('show');
+});
+// 点击遮罩空白处关闭详情
+detailMask.addEventListener('click', (e)=>{
+  if(e.target === detailMask){
+    detailMask.classList.remove('show');
   }
 });
 </script>
