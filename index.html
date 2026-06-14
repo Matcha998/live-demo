@@ -150,9 +150,10 @@ video {width:100%;display:block;}
   </div>
   <!-- 左右两分按钮 -->
   <div class="btn-row">
-    <button class="btn-half btn-detail" id="openDetailBtn">点击查看完整图文商品详情</button>
-    <button class="btn-half btn-buy">立即下单</button>
-  </div>
+  <button class="btn-half btn-detail" id="openDetailBtn">点击查看完整图文商品详情</button>
+  <!-- 新增 id="buyBtn" -->
+  <button class="btn-half btn-buy" id="buyBtn">立即下单</button>
+</div>
 </div>
 
 <!-- 内嵌详情弹窗（顶部25%区域露出视频，不被遮挡） -->
@@ -172,6 +173,7 @@ const pop=document.getElementById('pop');
 const detailMask = document.getElementById('detailMask');
 const openDetailBtn = document.getElementById('openDetailBtn');
 const closeDetailBtn = document.getElementById('closeDetailBtn');
+const buyBtn = document.getElementById('buyBtn'); // 新增下单按钮获取
 
 // 视频5秒弹出商品弹窗，30秒隐藏
 v.addEventListener('timeupdate',()=>{
@@ -182,11 +184,17 @@ v.addEventListener('timeupdate',()=>{
   }
 });
 
-// 打开详情弹窗 + 向Credamo发送点击标记
+// 点击查看详情：发送详情点击标记
 openDetailBtn.addEventListener('click', ()=>{
   detailMask.classList.add('show');
   window.parent.postMessage({trigger:"click_detail_btn"}, "*");
 });
+
+// 点击立即下单：发送下单点击标记（新增）
+buyBtn.addEventListener('click', ()=>{
+  window.parent.postMessage({trigger:"click_buy_btn"}, "*");
+});
+
 // 关闭详情弹窗
 closeDetailBtn.addEventListener('click', ()=>{
   detailMask.classList.remove('show');
