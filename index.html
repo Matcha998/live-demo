@@ -172,6 +172,17 @@ controlslist="nofullscreen">
 </div>
 
 <script>
+// 全屏拦截（你新加的）
+document.addEventListener('fullscreenchange', function(){
+    if(document.fullscreenElement){
+        document.exitFullscreen();
+    }
+});
+document.addEventListener('webkitfullscreenchange', function(){
+    if(document.webkitFullscreenElement){
+        document.webkitExitFullscreen();
+    }
+});
 const v=document.getElementById('v');
 const pop=document.getElementById('pop');
 const detailMask = document.getElementById('detailMask');
