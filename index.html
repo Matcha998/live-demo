@@ -126,10 +126,14 @@ video {width:100%;display:block;}
 <body>
 
 <div class="live-wrap">
-  <video id="v" controls controlslist="nofullscreen" preload="auto">
+  <video id="v" controls preload="auto"
+playsinline webkit-playsinline
+x5-video-player-type="h5"
+x5-video-player-fullscreen="false"
+controlslist="nofullscreen">
     <source src="https://voluble-gumdrop-e6919a.netlify.app/explainvideo.mp4" type="video/mp4">
     您的浏览器不支持视频播放，请更换浏览器重试
-  </video>
+</video>
   <div class="host-bar">
     <div class="avatar">BLT</div>
     <div>
