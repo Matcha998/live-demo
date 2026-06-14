@@ -139,10 +139,14 @@ video {width:100%;display:block;}
 
 <div class="live-wrap">
   <!-- 无讲解对照组视频链接 -->
-  <video id="v" controls controlslist="nofullscreen" preload="auto">
+  <video id="v" controls preload="auto"
+playsinline webkit-playsinline
+x5-video-player-type="h5"
+x5-video-player-fullscreen="false"
+controlslist="nofullscreen">
     <source src="https://meek-blini-b9ec1e.netlify.app/controlgroup.mp4" type="video/mp4">
     您的浏览器不支持视频播放
-  </video>
+</video>
   <div class="host-bar">
     <div class="avatar">BLT</div>
     <div>
