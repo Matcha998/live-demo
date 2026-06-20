@@ -269,12 +269,12 @@ v.addEventListener('timeupdate',()=>{
 // 点击查看详情：发送详情点击标记
 openDetailBtn.addEventListener('click', ()=>{
   detailMask.classList.add('show');
-  window.parent.postMessage({trigger:"click_detail_btn"}, "*");
+  window.parent.postMessage({trigger:"click_detail_btn"}, "https://matcha998.github.io");
 });
 
 // 点击立即下单：弹出下单成功弹窗 + 保留原有postMessage
 buyBtn.addEventListener('click', ()=>{
-  window.parent.postMessage({trigger:"click_buy_btn"}, "*");
+  window.parent.postMessage({trigger:"click_buy_btn"}, "https://matcha998.github.io");
   // 弹出成功窗口
   successMask.classList.add('show');
 });
