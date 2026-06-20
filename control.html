@@ -133,6 +133,59 @@ video {width:100%;display:block;}
   width:100%;
   border:0;
 }
+
+/* 下单成功弹窗样式（初代无倒计时版本） */
+.success-mask{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 10000;
+  display: none;
+}
+.success-mask.show{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.success-box{
+  width: 85%;
+  max-width: 360px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 30px 25px;
+  text-align: center;
+}
+.success-icon{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #07c160;
+  color: #fff;
+  font-size: 32px;
+  line-height: 60px;
+  margin: 0 auto 15px;
+}
+.success-text{
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+.success-desc{
+  color: #666;
+  margin-bottom: 25px;
+}
+.success-btn{
+  width: 100%;
+  padding: 12px;
+  background: #ff6700;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
 </style>
 </head>
 <body>
@@ -186,6 +239,16 @@ controlslist="nofullscreen">
   </div>
 </div>
 
+<!-- 下单成功弹窗（初代版本，无倒计时） -->
+<div class="success-mask" id="successMask">
+  <div class="success-box">
+    <div class="success-icon">✓</div>
+    <div class="success-text">下单成功！</div>
+    <div class="success-desc">订单已提交，等待发货~</div>
+    <button class="success-btn" id="closeSuccessBtn">确定</button>
+  </div>
+</div>
+
 <script>
 // 全屏拦截（你新加的）
 document.addEventListener('fullscreenchange', function(){
@@ -203,12 +266,15 @@ const triggerPopBtn = document.getElementById('triggerPopBtn');
 const detailMask = document.getElementById('detailMask');
 const openDetailBtn = document.getElementById('openDetailBtn');
 const closeDetailBtn = document.getElementById('closeDetailBtn');
-const buyBtn = document.getElementById('buyBtn'); // 新增下单按钮
+const buyBtn = document.getElementById('buyBtn');
+
+// 成功弹窗元素
+const successMask = document.getElementById('successMask');
+const closeSuccessBtn = document.getElementById('closeSuccessBtn');
 
 // 点击悬浮按钮弹出商品卡片
 triggerPopBtn.addEventListener('click', ()=>{
   pop.classList.add('show');
-  // 弹出商品弹窗后，隐藏唤起按钮，避免界面重叠
   triggerPopBtn.style.display = "none";
 });
 
@@ -218,10 +284,22 @@ openDetailBtn.addEventListener('click', ()=>{
   window.parent.postMessage({trigger:"click_detail_btn"}, "*");
 });
 
-// 新增：点击立即下单，发送下单点击标记
+// 点击立即下单：上报 + 弹出成功弹窗
 buyBtn.addEventListener('click', ()=>{
   window.parent.postMessage({trigger:"click_buy_btn"}, "*");
+  successMask.classList.add('show');
 });
+
+// 点击确定关闭成功弹窗
+closeSuccessBtn.addEventListener('click', ()=>{
+  successMask.classList.remove('show');
+})
+// 点击遮罩灰色区域关闭弹窗
+successMask.addEventListener('click', (e)=>{
+  if(e.target === successMask){
+    successMask.classList.remove('show');
+  }
+})
 
 // 关闭详情弹窗
 closeDetailBtn.addEventListener('click', ()=>{
@@ -233,7 +311,7 @@ detailMask.addEventListener('click', (e)=>{
   }
 });
 
-// 商品弹窗关闭时，重新显示唤起按钮（如需重复打开商品卡片）
+// 商品弹窗关闭时，重新显示唤起按钮
 pop.addEventListener('click', function(e){
   if(e.target === pop){
     pop.classList.remove('show');
