@@ -121,6 +121,59 @@ video {width:100%;display:block;}
   width:100%;
   border:0;
 }
+
+/* ========== 新增：下单成功弹窗样式 ========== */
+.success-mask{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 10000;
+  display: none;
+}
+.success-mask.show{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.success-box{
+  width: 85%;
+  max-width: 360px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 30px 25px;
+  text-align: center;
+}
+.success-icon{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #07c160;
+  color: #fff;
+  font-size: 32px;
+  line-height: 60px;
+  margin: 0 auto 15px;
+}
+.success-text{
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+.success-desc{
+  color: #666;
+  margin-bottom: 25px;
+}
+.success-btn{
+  width: 100%;
+  padding: 12px;
+  background: #ff6700;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
 </style>
 </head>
 <body>
@@ -171,6 +224,16 @@ controlslist="nofullscreen">
   </div>
 </div>
 
+<!-- ========== 新增：下单成功弹窗HTML ========== -->
+<div class="success-mask" id="successMask">
+  <div class="success-box">
+    <div class="success-icon">✓</div>
+    <div class="success-text">下单成功！</div>
+    <div class="success-desc">订单已提交，等待发货~</div>
+    <button class="success-btn" id="closeSuccessBtn">确定</button>
+  </div>
+</div>
+
 <script>
 // 全屏拦截（你新加的）
 document.addEventListener('fullscreenchange', function(){
@@ -190,6 +253,10 @@ const openDetailBtn = document.getElementById('openDetailBtn');
 const closeDetailBtn = document.getElementById('closeDetailBtn');
 const buyBtn = document.getElementById('buyBtn'); // 新增下单按钮获取
 
+// 成功弹窗元素
+const successMask = document.getElementById('successMask');
+const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+
 // 视频5秒弹出商品弹窗，30秒隐藏
 v.addEventListener('timeupdate',()=>{
   if(v.currentTime>=5 && v.currentTime<30){
@@ -205,10 +272,23 @@ openDetailBtn.addEventListener('click', ()=>{
   window.parent.postMessage({trigger:"click_detail_btn"}, "*");
 });
 
-// 点击立即下单：发送下单点击标记（新增）
+// 点击立即下单：弹出下单成功弹窗 + 保留原有postMessage
 buyBtn.addEventListener('click', ()=>{
   window.parent.postMessage({trigger:"click_buy_btn"}, "*");
+  // 弹出成功窗口
+  successMask.classList.add('show');
 });
+
+// 关闭成功弹窗
+closeSuccessBtn.addEventListener('click', ()=>{
+  successMask.classList.remove('show');
+})
+// 点击遮罩空白处关闭成功弹窗
+successMask.addEventListener('click', (e)=>{
+  if(e.target === successMask){
+    successMask.classList.remove('show');
+  }
+})
 
 // 关闭详情弹窗
 closeDetailBtn.addEventListener('click', ()=>{
