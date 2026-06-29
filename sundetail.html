@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUNN云感清透防晒乳详情页</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:微软雅黑}
+body{background:#f7f7f7;color:#222;max-width:750px;margin:0 auto;background:#fff}
+.top-banner{width:100%;background:#f5f5f5;padding:20px}
+.main-img{width:100%;border-radius:10px}
+.info-box{padding:16px;border-bottom:8px solid #f5f5f5}
+.pro-name{font-size:20px;font-weight:bold;margin-bottom:8px}
+.pro-price{color:#ff4400;font-size:22px;font-weight:bold;margin:10px 0}
+.tag{display:inline-block;background:#ff6700;color:#fff;padding:3px 8px;border-radius:4px;font-size:12px;margin-right:6px}
+.module{padding:16px;border-bottom:8px solid #f5f5f5}
+.module-title{font-size:17px;font-weight:bold;margin-bottom:14px;border-left:4px solid #ff6700;padding-left:8px}
+.text-block{line-height:1.8;color:#444;margin-bottom:12px}
+.desc-img{width:100%;margin:10px 0;border-radius:8px}
+ul.feature{padding-left:20px;line-height:2}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+td{border:1px solid #eee;padding:10px;font-size:14px}
+td:nth-child(1){background:#f8f8f8;width:35%}
+.bottom-buy{position:sticky;bottom:0;background:#fff;padding:12px;display:flex;gap:10px;box-shadow:0 -2px 8px #00000010}
+.buy-btn{flex:1;padding:14px;text-align:center;border-radius:8px;text-decoration:none;font-weight:bold;border:none;cursor:pointer;font-size:16px}
+.cart{border:1px solid #ff6700;color:#ff6700;background:#fff}
+.buy{background:#ff6700;color:#fff}
+
+/* 下单成功弹窗样式 */
+.success-mask{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 10000;
+  display: none;
+}
+.success-mask.show{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.success-box{
+  width: 85%;
+  max-width: 360px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 30px 25px;
+  text-align: center;
+}
+.success-icon{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #07c160;
+  color: #fff;
+  font-size: 32px;
+  line-height: 60px;
+  margin: 0 auto 15px;
+}
+.success-text{
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+.success-desc{
+  color: #666;
+  margin-bottom: 25px;
+}
+.success-btn{
+  width: 100%;
+  padding: 12px;
+  background: #ff6700;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<!-- 商品主图（替换为你的防晒主图地址，上传图片后修改src链接即可） -->
+<div class="top-banner">
+  <img class="main-img" src="https://matcha998.github.io/live-demo/sunmain.jpg">
+</div>
+
+<!-- 商品基础信息 -->
+<div class="info-box">
+  <div class="pro-name">LUNN云感清透防晒乳 SPF50+高倍物化防晒</div>
+<div class="pro-price"> ¥59.9</div>
+  <span class="tag">防水防汗</span>
+  <span class="tag">敏感肌可用</span>
+  <span class="tag">免卸妆</span>
+  <p>冰淇淋一抹化水质地，通勤海边全场景，男女通用清爽哑光防晒</p>
+</div>
+
+<!-- 产品规格参数 -->
+<div class="module">
+  <div class="module-title">产品规格参数</div>
+  <table>
+    <tr><td>产品名称</td><td>LUNN云感清透防晒乳</td></tr>
+    <tr><td>防晒指数</td><td>SPF50+ PA+++ 物化结合防晒</td></tr>
+    <tr><td>核心成分</td><td>红没药醇、透明质酸，无酒精配方</td></tr>
+    <tr><td>质地肤感</td><td>冰淇淋乳状，3秒成膜，哑光丝绒不泛白</td></tr>
+    <tr><td>适用场景</td><td>日常通勤、户外运动、海边度假、日常妆前打底</td></tr>
+    <tr><td>清洁方式</td><td>普通洗面奶即可洗净，无需专用卸妆产品</td></tr>
+  </table>
+</div>
+
+<!-- 核心防晒力卖点模块 -->
+<div class="module">
+  <div class="module-title">高倍物化防晒 防水耐汗长效防护</div>
+  <img class="desc-img" src="https://matcha998.github.io/live-demo/sunpower.jpg">
+  <ul class="feature">
+    <li>SPF50+ PA++++加高倍防晒力，强效抵御紫外线</li>
+    <li>物化结合防晒体系，防水防汗</li>
+  </ul>
+</div>
+
+<!-- 质地肤感模块 -->
+<div class="module">
+  <div class="module-title">冰淇淋水润质地 上脸哑光丝绒</div>
+  <img class="desc-img" src="https://matcha998.github.io/live-demo/suntexture.jpg">
+  <ul class="feature">
+    <li>软糯冰淇淋质地，推开瞬间化水</li>
+    <li>上脸3秒快速成膜，不假白、不闷痘</li>
+    <li>高级哑光丝绒肤感，夏天使用清爽不黏腻</li>
+  </ul>
+</div>
+
+<!-- 温和配方&适用人群模块 -->
+<div class="module">
+  <div class="module-title">温和养肤配方 敏感肌安心用</div>
+  <img class="desc-img" src="https://matcha998.github.io/live-demo/suningredient.jpg">
+  <ul class="feature">
+    <li>添加红没药醇舒缓修护，搭配透明质酸长效保湿</li>
+    <li>0酒精温和配方，敏感肌放心用</li>
+    <li>懒人福音免卸妆</li>
+  </ul>
+</div>
+
+<!-- 使用场景模块 -->
+<div class="module">
+  <div class="module-title">多场景防护 一瓶全搞定</div>
+  <img class="desc-img" src="https://matcha998.github.io/live-demo/suncontext.jpg">
+  <ul class="feature">
+    <li>日常通勤、户外运动、海边暴晒都能用</li>
+    <li>长时间户外也能稳固锁防晒力，无惧日晒</li>
+  </ul>
+</div>
+
+<!-- 底部操作按钮 -->
+<div class="bottom-buy">
+  <button class="buy-btn cart">加入购物车</button>
+  <button class="buy-btn buy" id="detailBuyBtn">立即下单</button>
+</div>
+
+<!-- 下单成功弹窗（逻辑完全保留） -->
+<div class="success-mask" id="successMask">
+  <div class="success-box">
+    <div class="success-icon">✓</div>
+    <div class="success-text">下单成功！</div>
+    <div class="success-desc">订单已提交，现货尽快安排发货~</div>
+    <button class="success-btn" id="closeSuccessBtn">确定</button>
+  </div>
+</div>
+
+<script>
+const detailBuyBtn = document.getElementById('detailBuyBtn');
+const successMask = document.getElementById('successMask');
+const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+
+function closeModal(){
+    successMask.classList.remove('show');
+}
+
+// 点击下单唤起弹窗
+detailBuyBtn.addEventListener('click', function(e){
+    e.preventDefault();
+    successMask.classList.add('show');
+});
+
+closeSuccessBtn.addEventListener('click', closeModal);
+successMask.addEventListener('click', function(e){
+    if(e.target === successMask){
+        closeModal();
+    }
+});
+</script>
+
+</body>
+</html>
