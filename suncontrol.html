@@ -244,8 +244,8 @@ controlslist="nofullscreen">
   <div class="success-box">
     <div class="success-icon">✓</div>
     <div class="success-text">下单成功！</div>
-    <button class="success-btn" id="closeSuccessBtn">继续逛逛</button>
-    <div class="success-desc">查看订单详情</div>   
+    <div class="success-desc">订单已提交，等待发货~</div>
+    <button class="success-btn" id="closeSuccessBtn">确定</button>
   </div>
 </div>
 
@@ -281,16 +281,12 @@ triggerPopBtn.addEventListener('click', ()=>{
 // 点击查看详情弹窗 + 发送详情点击标记
 openDetailBtn.addEventListener('click', ()=>{
   detailMask.classList.add('show');
-  window.parent.postMessage({
-    trigger:"click_detail_btn"
-},"*");
+  window.parent.postMessage({trigger:"click_detail_btn"}, "https://matcha998.github.io");
 });
 
 // 点击立即下单：上报 + 弹出成功弹窗
 buyBtn.addEventListener('click', ()=>{
-  window.parent.postMessage({
-    trigger:"click_buy_btn"
-},"*");
+  window.parent.postMessage({trigger:"click_buy_btn"}, "https://matcha998.github.io");
   successMask.classList.add('show');
 });
 
