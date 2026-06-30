@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>直播-无主播讲解对照组</title>
+<title>直播购物模拟</title>
 <style>
 * {margin:0;padding:0;box-sizing:border-box;}
 body {background:#f5f5f5; font-family:微软雅黑;}
@@ -14,24 +14,7 @@ video {width:100%;display:block;}
 .host-name {font-size:16px;font-weight:bold;}
 .live-tag {background:red;color:#fff;font-size:12px;padding:2px 6px;border-radius:4px;margin-left:8px;}
 
-/* 唤起商品弹窗的悬浮按钮：和商品弹窗同位置，不脱离视频区域 */
-.trigger-pop-btn{
-  position:fixed; 
-  bottom:120px; 
-  left:50%; 
-  transform:translateX(-50%);
-  width:calc(100% - 80px); 
-  max-width:760px;
-  padding:12px 24px;
-  background:#eeeeee;
-  border:0;
-  border-radius:10px;
-  font-size:15px;
-  cursor:pointer;
-  z-index:998;
-}
-
-/* 对照组：商品弹窗默认隐藏，不会自动弹出 */
+/* 底部商品弹窗 */
 .product-pop {
   position:fixed; 
   bottom:25px; 
@@ -66,11 +49,12 @@ video {width:100%;display:block;}
 .p-title {font-size:18px;font-weight:bold;margin-bottom:8px;line-height:1.4;}
 .p-price {color:#ff4400;font-size:20px;font-weight:bold;}
 
-/* 双按钮并排容器，和实验组样式完全统一 */
+/* 新增：双按钮并排容器 */
 .btn-row {
   display:flex;
   gap:12px;
 }
+/* 左右两个按钮各占一半宽度 */
 .btn-half {
   flex:1;
   padding:14px;
@@ -80,16 +64,18 @@ video {width:100%;display:block;}
   font-weight:bold;
   font-size:16px;
 }
+/* 左侧查看详情按钮 */
 .btn-detail {
   background:#f0f0f0;
   color:#333;
 }
+/* 右侧立即下单按钮 */
 .btn-buy {
   background:#ff6700;
   color:#fff;
 }
 
-/* 详情弹窗样式和实验组完全一致，顶部30%透明露出视频 */
+/* 全屏遮罩：顶部30%透明，不遮挡视频 */
 .detail-mask {
   position:fixed;
   inset:0;
@@ -98,6 +84,8 @@ video {width:100%;display:block;}
   background:linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.6) 25%);
 }
 .detail-mask.show {display:block;}
+
+/* 详情弹窗：仅占据下方75%可视区域，顶部留白显示视频 */
 .detail-box {
   width:92%;
   max-width:780px;
@@ -134,7 +122,7 @@ video {width:100%;display:block;}
   border:0;
 }
 
-/* 下单成功弹窗样式（初代无倒计时版本） */
+/* ========== 新增：下单成功弹窗样式 ========== */
 .success-mask{
   position: fixed;
   inset: 0;
@@ -191,14 +179,13 @@ video {width:100%;display:block;}
 <body>
 
 <div class="live-wrap">
-  <!-- 无讲解对照组视频链接 -->
   <video id="v" controls preload="auto"
 playsinline webkit-playsinline
 x5-video-player-type="h5"
 x5-video-player-fullscreen="false"
 controlslist="nofullscreen">
-    <source src="https://neon-madeleine-a9f04c.netlify.app/suncontrol.mp4" type="video/mp4">
-    您的浏览器不支持视频播放
+    <source src="https://sunexplain.netlify.app/sunexplain.mp4" type="video/mp4">
+    您的浏览器不支持视频播放，请更换浏览器重试
 </video>
   <div class="host-bar">
     <div class="avatar">LUNN</div>
@@ -209,37 +196,35 @@ controlslist="nofullscreen">
   </div>
 </div>
 
-<!-- 悬浮唤起商品按钮：固定在视频画面内，不脱离视频底部区域 -->
-<button class="trigger-pop-btn" id="triggerPopBtn">查看本场直播商品</button>
-
-<!-- 商品弹窗：替换为左右双按钮布局 -->
+<!-- 底部商品弹窗（按钮改为左右双栏） -->
 <div class="product-pop" id="pop">
   <div class="pop-row">
-    <img class="pop-left-img" src="https://matcha998.github.io/live-demo/sunmain.jpg">
+    <img class="pop-left-img" src="https://matcha998.github.io/live-demo/mainimage6.8.jpg">
     <div class="pop-right-text">
       <div class="p-title">LUNN云感清透防晒乳 SPF50+</div>
       <div class="p-price">直播间专享特惠 ¥59.9</div>
     </div>
   </div>
-  <!-- 左右两分按钮，分别绑定id -->
+  <!-- 左右两分按钮 -->
   <div class="btn-row">
-    <button class="btn-half btn-detail" id="openDetailBtn">查看完整图文详情</button>
-    <button class="btn-half btn-buy" id="buyBtn">立即下单</button>
-  </div>
+  <button class="btn-half btn-detail" id="openDetailBtn">查看完整图文详情</button>
+  <!-- 新增 id="buyBtn" -->
+  <button class="btn-half btn-buy" id="buyBtn">立即下单</button>
+</div>
 </div>
 
-<!-- 详情弹窗（和实验组完全相同） -->
+<!-- 内嵌详情弹窗（顶部25%区域露出视频，不被遮挡） -->
 <div class="detail-mask" id="detailMask">
   <div class="detail-box">
     <div class="detail-top">
       <span>商品完整详情</span>
       <button class="detail-close" id="closeDetailBtn">×</button>
     </div>
-    <iframe class="detail-iframe" src="https://Matcha998.github.io/live-demo/sundetail.html"></iframe>
+    <iframe class="detail-iframe" src="https://Matcha998.github.io/live-demo/detail.html"></iframe>
   </div>
 </div>
 
-<!-- 下单成功弹窗（初代版本，无倒计时） -->
+<!-- ========== 新增：下单成功弹窗HTML ========== -->
 <div class="success-mask" id="successMask">
   <div class="success-box">
     <div class="success-icon">✓</div>
@@ -261,40 +246,44 @@ document.addEventListener('webkitfullscreenchange', function(){
         document.webkitExitFullscreen();
     }
 });
-const pop = document.getElementById('pop');
-const triggerPopBtn = document.getElementById('triggerPopBtn');
+const v=document.getElementById('v');
+const pop=document.getElementById('pop');
 const detailMask = document.getElementById('detailMask');
 const openDetailBtn = document.getElementById('openDetailBtn');
 const closeDetailBtn = document.getElementById('closeDetailBtn');
-const buyBtn = document.getElementById('buyBtn');
+const buyBtn = document.getElementById('buyBtn'); // 新增下单按钮获取
 
 // 成功弹窗元素
 const successMask = document.getElementById('successMask');
 const closeSuccessBtn = document.getElementById('closeSuccessBtn');
 
-// 点击悬浮按钮弹出商品卡片
-triggerPopBtn.addEventListener('click', ()=>{
-  pop.classList.add('show');
-  triggerPopBtn.style.display = "none";
+// 视频5秒弹出商品弹窗，30秒隐藏
+v.addEventListener('timeupdate',()=>{
+  if(v.currentTime>=5 && v.currentTime<30){
+    pop.classList.add('show');
+  }else{
+    pop.classList.remove('show');
+  }
 });
 
-// 点击查看详情弹窗 + 发送详情点击标记
+// 点击查看详情：发送详情点击标记
 openDetailBtn.addEventListener('click', ()=>{
   detailMask.classList.add('show');
   window.parent.postMessage({trigger:"click_detail_btn"}, "https://matcha998.github.io");
 });
 
-// 点击立即下单：上报 + 弹出成功弹窗
+// 点击立即下单：弹出下单成功弹窗 + 保留原有postMessage
 buyBtn.addEventListener('click', ()=>{
   window.parent.postMessage({trigger:"click_buy_btn"}, "https://matcha998.github.io");
+  // 弹出成功窗口
   successMask.classList.add('show');
 });
 
-// 点击确定关闭成功弹窗
+// 关闭成功弹窗
 closeSuccessBtn.addEventListener('click', ()=>{
   successMask.classList.remove('show');
 })
-// 点击遮罩灰色区域关闭弹窗
+// 点击遮罩空白处关闭成功弹窗
 successMask.addEventListener('click', (e)=>{
   if(e.target === successMask){
     successMask.classList.remove('show');
@@ -305,19 +294,13 @@ successMask.addEventListener('click', (e)=>{
 closeDetailBtn.addEventListener('click', ()=>{
   detailMask.classList.remove('show');
 });
+// 点击遮罩灰色区域关闭弹窗
 detailMask.addEventListener('click', (e)=>{
   if(e.target === detailMask){
     detailMask.classList.remove('show');
   }
 });
-
-// 商品弹窗关闭时，重新显示唤起按钮
-pop.addEventListener('click', function(e){
-  if(e.target === pop){
-    pop.classList.remove('show');
-    triggerPopBtn.style.display = "block";
-  }
-});
 </script>
+
 </body>
 </html>
