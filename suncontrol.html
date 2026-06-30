@@ -281,12 +281,15 @@ triggerPopBtn.addEventListener('click', ()=>{
 // 点击查看详情弹窗 + 发送详情点击标记
 openDetailBtn.addEventListener('click', ()=>{
   detailMask.classList.add('show');
-  window.parent.postMessage({trigger:"click_detail_btn"}, "https://matcha998.github.io");
-});
+  window.parent.postMessage({
+    trigger:"click_detail_btn"
+},"*");
 
 // 点击立即下单：上报 + 弹出成功弹窗
 buyBtn.addEventListener('click', ()=>{
-  window.parent.postMessage({trigger:"click_buy_btn"}, "https://matcha998.github.io");
+  window.parent.postMessage({
+    trigger:"click_buy_btn"
+},"*");
   successMask.classList.add('show');
 });
 
