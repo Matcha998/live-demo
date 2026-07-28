@@ -12,6 +12,7 @@ video {width:100%;display:block;}
 
 /* 底部自动弹出单品橱窗弹窗 */
 .product-pop {
+  position:relative;
   position:fixed; 
   bottom:85px;
   left:50%; 
@@ -26,6 +27,18 @@ video {width:100%;display:block;}
   z-index:999;
 }
 .product-pop.show {display:block;}
+/* 底部橱窗左上角正在讲解标签 */
+.pop-play-tag {
+  position:absolute;
+  top:0;
+  left:0;
+  background:#ff4400;
+  color:#fff;
+  font-size:12px;
+  padding:2px 8px;
+  border-radius:14px 0 4px 0;
+  z-index:2;
+}
 .pop-row {
   display:flex;
   gap:14px;
@@ -285,8 +298,9 @@ controlslist="nofullscreen">
 </video>
 </div>
 
-<!-- 视频5-30秒自动弹出底部单品橱窗 -->
+<!-- 视频5-30秒自动弹出底部单品橱窗（新增左上角正在讲解标签） -->
 <div class="product-pop" id="pop">
+  <span class="pop-play-tag">正在讲解</span>
   <div class="pop-row">
     <img class="pop-left-img" src="https://matcha998.github.io/live-demo/vernas1.jpg">
     <div class="pop-right-text">
