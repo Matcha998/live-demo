@@ -400,7 +400,7 @@ const closeSuccessBtn = document.getElementById('closeSuccessBtn');
 
 // 视频计时：5-30秒自动弹出底部单品橱窗
 v.addEventListener('timeupdate', () => {
-  if(v.currentTime >= 20 && v.currentTime < 60){
+  if(v.currentTime >= 15 && v.currentTime < 30){
     pop.classList.add('show');
   }else{
     pop.classList.remove('show');
