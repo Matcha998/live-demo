@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>直播购物模拟-对照组</title>
+<style>
+* {margin:0;padding:0;box-sizing:border-box;}
+body {background:#f5f5f5; font-family:微软雅黑; padding-bottom:80px;}
+.live-wrap {max-width:800px;margin:20px auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px #0002;}
+video {width:100%;display:block;}
+
+/* 底部单品橱窗弹窗（对照组永久隐藏，无任何触发逻辑） */
+.product-pop {
+  position:fixed; 
+  bottom:85px;
+  left:50%; 
+  transform:translateX(-50%);
+  width:calc(100% - 40px); 
+  max-width:800px;
+  background:#fff; 
+  border-radius:14px;
+  box-shadow:0 5px 25px rgba(0,0,0,0.15); 
+  padding:20px; 
+  display:none; 
+  z-index:999;
+}
+.product-pop.show {display:none;}
+.pop-row {
+  display:flex;
+  gap:14px;
+  align-items:center;
+  margin-bottom:16px;
+}
+.pop-left-img {
+  width:90px;
+  height:90px;
+  object-fit:cover;
+  border-radius:10px;
+}
+.pop-right-text {
+  flex:1;
+}
+.p-title {font-size:18px;font-weight:bold;margin-bottom:8px;line-height:1.4;}
+.p-price {color:#ff4400;font-size:20px;font-weight:bold;}
+.btn-row {
+  display:flex;
+  gap:12px;
+}
+.btn-half {
+  flex:1;
+  padding:14px;
+  border-radius:10px;
+  border:0;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:16px;
+}
+.btn-detail {
+  background:#f0f0f0;
+  color:#333;
+}
+.btn-buy {
+  background:#ff6700;
+  color:#fff;
+}
+
+/* 常驻底部「查看全部商品」按钮 */
+.bottom-all-btn-wrap {
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  width:calc(100% - 40px);
+  max-width:800px;
+  z-index:998;
+}
+.btn-all-fixed {
+  width:100%;
+  padding:13px;
+  border-radius:10px;
+  border:1px solid #ff6700;
+  background:#fff;
+  color:#ff6700;
+  font-weight:bold;
+  font-size:15px;
+  cursor:pointer;
+}
+
+/* 全部商品弹窗遮罩（中层） */
+.all-mask {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  z-index:10000;
+  display:none;
+}
+.all-mask.show {display:block;}
+.all-box {
+  position:absolute;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:800px;
+  background:#fff;
+  border-radius:16px 16px 0 0;
+  padding:20px;
+  max-height:75vh;
+  overflow-y:auto;
+}
+.all-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+  padding-bottom:12px;
+  border-bottom:1px solid #eee;
+}
+.all-top h3 {font-size:18px;}
+.all-close {
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  border:0;
+  background:#eee;
+  font-size:18px;
+  cursor:pointer;
+}
+
+/* 弹窗内商品样式：去除讲解高亮底色 */
+.all-item {
+  display:block;
+  padding:14px 8px;
+  border-radius:10px;
+  position:relative;
+}
+.all-item-inner {
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+}
+.all-img {
+  width:80px;
+  height:80px;
+  border-radius:10px;
+  object-fit:cover;
+}
+.all-text {
+  flex:1;
+  min-width:0;
+}
+.all-text h4 {font-size:16px;margin-bottom:6px;line-height:1.4;}
+.all-text .price {color:#ff4400;font-weight:bold;font-size:18px;}
+
+/* 移除正在讲解标签全部CSS，彻底失效 */
+.play-tag {
+  display: none !important;
+}
+
+/* 商品下方固定双按钮区域，永久显示 */
+.item-btn-wrap {
+  width:100%;
+  margin-top:16px;
+}
+
+/* 商品详情弹窗遮罩【最高层级30000，覆盖全部商品弹窗】 */
+.detail-mask {
+  position:fixed;
+  inset:0;
+  z-index:30000;
+  display:none;
+  background:linear-gradient(to bottom, transparent 15%, rgba(0,0,0,0.6) 25%);
+}
+.detail-mask.show {display:block;}
+.detail-box {
+  width:92%;
+  max-width:780px;
+  height:90vh;
+  background:#fff;
+  border-radius:14px;
+  position:absolute;
+  left:50%;
+  bottom:2vh;
+  transform:translateX(-50%);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.detail-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 16px;
+  border-bottom:1px solid #eee;
+}
+.detail-close {
+  background:#eee;
+  border:0;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  font-size:18px;
+  cursor:pointer;
+}
+.detail-iframe {
+  flex:1;
+  width:100%;
+  border:0;
+}
+
+/* 下单成功弹窗（高于商品弹窗，低于详情弹窗） */
+.success-mask{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  z-index:20000;
+  display:none;
+}
+.success-mask.show{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.success-box{
+  width:85%;
+  max-width:360px;
+  background:#fff;
+  border-radius:14px;
+  padding:30px 25px;
+  text-align:center;
+}
+.success-icon{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  background:#07c160;
+  color:#fff;
+  font-size:32px;
+  line-height:60px;
+  margin:0 auto 15px;
+}
+.success-text{
+  font-size:20px;
+  font-weight:bold;
+  color:#333;
+  margin-bottom:20px;
+}
+.success-desc{
+  color:#666;
+  margin-bottom:25px;
+}
+.success-btn{
+  width:100%;
+  padding:12px;
+  background:#ff6700;
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="live-wrap">
+  <video id="v" controls preload="auto"
+playsinline webkit-playsinline
+x5-video-player-type="h5"
+x5-video-player-fullscreen="false"
+controlslist="nofullscreen">
+    <source src="https://live-video-exp.oss-cn-hangzhou.aliyuncs.com/taiking_fuzzy.mp4">
+    您的浏览器不支持视频播放，请更换浏览器重试
+</video>
+</div>
+
+<!-- 底部单品橱窗：保留DOM，但全程不会自动弹出，无触发逻辑 -->
+<div class="product-pop" id="pop">
+  <div class="pop-row">
+    <img class="pop-left-img" src="https://matcha998.github.io/live-demo/vernas1.jpg">
+    <div class="pop-right-text">
+      <div class="p-title">【直播专属】维娜氏焕颜精粹露紧致抗皱滋养湿敷补水保湿修护</div>
+      <div class="p-price">¥199</div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-half btn-detail" id="openDetailBtn">查看完整图文详情</button>
+    <button class="btn-half btn-buy" id="buyBtn">立即下单</button>
+  </div>
+</div>
+
+<!-- 页面底部常驻「查看全部商品」按钮 -->
+<div class="bottom-all-btn-wrap">
+  <button class="btn-all-fixed" id="openAllBtn">查看全部商品</button>
+</div>
+
+<!-- 全部商品弹窗：仅同款商品，删除正在讲解标签span -->
+<div class="all-mask" id="allMask">
+  <div class="all-box">
+    <div class="all-top">
+      <h3>直播间商品</h3>
+      <button class="all-close" id="closeAllBtn">×</button>
+    </div>
+    <div class="all-list">
+      <!-- 唯一商品：移除play-tag标签，无讲解标识、无浅橙底色 -->
+      <div class="all-item">
+        <div class="all-item-inner">
+          <img class="all-img" src="https://matcha998.github.io/live-demo/vernas1.jpg">
+          <div class="all-text">
+            <h4>【直播专属】维娜氏焕颜精粹露紧致抗皱滋养湿敷补水保湿修护</h4>
+            <div class="price">¥199</div>
+          </div>
+        </div>
+        <!-- 商品下方永久显示双按钮 -->
+        <div class="btn-row item-btn-wrap">
+          <button class="btn-half btn-detail" id="listOpenDetail">查看完整图文详情</button>
+          <button class="btn-half btn-buy" id="listBuyBtn">立即下单</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 下单成功弹窗 -->
+<div class="success-mask" id="successMask">
+  <div class="success-box">
+    <div class="success-icon">✓</div>
+    <div class="success-text">下单成功！</div>
+    <div class="success-desc">查看订单详情</div>
+    <button class="success-btn" id="closeSuccessBtn">继续逛逛</button>
+  </div>
+</div>
+
+<!-- 商品详情弹窗【置顶层级，盖在商品弹窗上方】 -->
+<div class="detail-mask" id="detailMask">
+  <div class="detail-box">
+    <div class="detail-top">
+      <span>商品完整详情</span>
+      <button class="detail-close" id="closeDetailBtn">×</button>
+    </div>
+    <iframe class="detail-iframe" src="https://v.douyin.com/bMRNBFDmes8/"></iframe>
+  </div>
+</div>
+
+<script>
+// 禁止全屏
+document.addEventListener('fullscreenchange', function(){
+    if(document.fullscreenElement) document.exitFullscreen();
+});
+document.addEventListener('webkitfullscreenchange', function(){
+    if(document.webkitFullscreenElement) document.webkitExitFullscreen();
+});
+
+// 全局DOM元素
+const v = document.getElementById('v');
+const pop = document.getElementById('pop');
+const detailMask = document.getElementById('detailMask');
+const openDetailBtn = document.getElementById('openDetailBtn');
+const closeDetailBtn = document.getElementById('closeDetailBtn');
+const buyBtn = document.getElementById('buyBtn');
+
+// 弹窗内商品按钮
+const listOpenDetail = document.getElementById('listOpenDetail');
+const listBuyBtn = document.getElementById('listBuyBtn');
+
+// 全部商品弹窗控制
+const allMask = document.getElementById('allMask');
+const openAllBtn = document.getElementById('openAllBtn');
+const closeAllBtn = document.getElementById('closeAllBtn');
+
+// 下单成功弹窗
+const successMask = document.getElementById('successMask');
+const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+
+// ========== 对照组核心修改：删除视频自动弹出商品弹窗逻辑 ==========
+// v.addEventListener('timeupdate', () => {
+//   if(v.currentTime >= 5 && v.currentTime < 30){
+//     pop.classList.add('show');
+//   }else{
+//     pop.classList.remove('show');
+//   }
+// });
+
+// 底部橱窗按钮保留，但页面不会自动弹出橱窗
+openDetailBtn.addEventListener('click', () => {
+  detailMask.classList.add('show');
+  window.parent.postMessage({trigger:"click_detail_btn"}, "*");
+});
+buyBtn.addEventListener('click', () => {
+  window.parent.postMessage({trigger:"click_buy_btn"}, "*");
+  successMask.classList.add('show');
+});
+
+// 弹窗内商品-查看详情
+listOpenDetail.addEventListener('click', (e) => {
+  e.stopPropagation();
+  detailMask.classList.add('show');
+  window.parent.postMessage({trigger:"click_detail_btn"}, "*");
+});
+// 弹窗内商品-立即下单
+listBuyBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  window.parent.postMessage({trigger:"click_buy_btn"}, "*");
+  successMask.classList.add('show');
+});
+
+// 关闭详情弹窗
+closeDetailBtn.addEventListener('click', () => {
+  detailMask.classList.remove('show');
+});
+detailMask.addEventListener('click', (e) => {
+  if(e.target === detailMask) detailMask.classList.remove('show');
+});
+
+// 关闭下单成功弹窗
+closeSuccessBtn.addEventListener('click', () => {
+  successMask.classList.remove('show');
+});
+successMask.addEventListener('click', (e) => {
+  if(e.target === successMask) successMask.classList.remove('show');
+});
+
+// 打开全部商品弹窗
+openAllBtn.addEventListener('click', () => {
+  allMask.classList.add('show');
+});
+// 关闭全部商品弹窗
+closeAllBtn.addEventListener('click', () => {
+  allMask.classList.remove('show');
+});
+allMask.addEventListener('click', (e) => {
+  if(e.target === allMask) allMask.classList.remove('show');
+});
+</script>
+
+</body>
+</html>
