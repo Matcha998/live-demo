@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>vernas精粹水详情页</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:微软雅黑}
+body{background:#f7f7f7;color:#222;max-width:750px;margin:0 auto;background:#fff}
+/* 轮播外层，保留边距 */
+.top-banner{
+  width:100%;
+  background:#f5f5f5;
+  padding:20px;
+}
+/* 滚动容器：宽度自适应，不限制高度 */
+.slide-wrap {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  border-radius:10px;
+  /* 隐藏滚动条 */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.slide-wrap::-webkit-scrollbar {
+  display: none;
+  height: 0;
+}
+/* 轮播列表：弹性横向排列，宽度自适应子元素总和 */
+.slide-list {
+  display: flex;
+  width: auto;
+}
+/* 单张轮播项：固定1:1正方形，占满滚动容器宽度 */
+.slide-item {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  aspect-ratio: 1 / 1;
+  border-radius:10px;
+  background:#f5f5f5;
+}
+/* 图片填满正方形容器，完整居中不变形 */
+.slide-item img {
+  width: 100%;
+  height: 100%;
+  display:block;
+  border-radius:10px;
+  object-fit: contain;
+}
+.info-box{padding:16px;border-bottom:8px solid #f5f5f5}
+.pro-name{font-size:20px;font-weight:bold;margin-bottom:8px}
+.pro-price{color:#ff4400;font-size:22px;font-weight:bold;margin:10px 0}
+.tag{display:inline-block;background:#ff6700;color:#fff;padding:3px 8px;border-radius:4px;font-size:12px;margin-right:6px}
+.module{padding:16px;border-bottom:8px solid #f5f5f5}
+.desc-img{width:100%;margin:10px 0;border-radius:8px}
+.bottom-buy{position:sticky;bottom:0;background:#fff;padding:12px;display:flex;gap:10px;box-shadow:0 -2px 8px #00000010}
+.buy-btn{flex:1;padding:14px;text-align:center;border-radius:8px;text-decoration:none;font-weight:bold;border:none;cursor:pointer;font-size:16px}
+.cart{border:1px solid #ff6700;color:#ff6700;background:#fff}
+.buy{background:#ff6700;color:#fff}
+/* 下单弹窗 */
+.success-mask{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 10000;
+  display: none;
+}
+.success-mask.show{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.success-box{
+  width: 85%;
+  max-width: 360px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 30px 25px;
+  text-align: center;
+}
+.success-icon{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #07c160;
+  color: #fff;
+  font-size: 32px;
+  line-height: 60px;
+  margin: 0 auto 15px;
+}
+.success-text{
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+.success-desc{
+  color: #666;
+  margin-bottom: 25px;
+}
+.success-btn{
+  width: 100%;
+  padding: 12px;
+  background: #ff6700;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+<!-- 轮播区域 -->
+<div class="top-banner">
+  <div class="slide-wrap">
+    <div class="slide-list">
+      <div class="slide-item">
+        <img src="https://matcha998.github.io/live-demo/vernas1.jpg">
+      </div>
+      <div class="slide-item">
+        <img src="https://matcha998.github.io/live-demo/Verna2.jpg">
+      </div>
+      <div class="slide-item">
+        <img src="https://matcha998.github.io/live-demo/vernas3.jpg">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 商品信息 -->
+<div class="info-box">
+  <div class="pro-name">【直播专属】维娜氏焕颜精粹露紧致抗皱滋养湿敷补水保湿修护</div>
+  <div class="pro-price"> ¥199</div>
+  <span class="tag">运费险</span>
+  <span class="tag">七天无理由退货</span>
+  <span class="tag">正品保障</span>
+</div>
+<!-- 全部详情图 -->
+<div class="module">
+  <img class="desc-img" src="https://matcha998.github.io/live-demo/vernas5.jpg">
+</div>
+<div class="module">
+  <img class="desc-img" src="https://matcha998.github.io/live-demo/vernas6.jpg">
+</div>
+<div class="module">
+  <img class="desc-img" src="https://matcha998.github.io/live-demo/vernas7.jpg">
+</div>
+<div class="module">
+  <img class="desc-img" src="https://matcha998.github.io/live-demo/vernas8.jpg">
+</div>
+<div class="module">
+  <img class="desc-img" src="https://matcha998.github.io/live-demo/vernas9.jpg">
+</div>
+<div class="module">
+  <img class="desc-img" src="https://matcha998.github.io/live-demo/vernas10.jpg">
+</div>
+<div class="module">
+  <img class="desc-img" src="https://matcha998.github.io/live-demo/vernas11.jpg">
+</div>
+<div class="module">
+  <img class="desc-img" src="https://matcha998.github.io/live-demo/vernas13.jpg">
+</div>
+<div class="module">
+  <img class="desc-img" src="https://matcha998.github.io/live-demo/vernas16.jpg">
+</div>
+
+<!-- ========= 实验验证码模块：所有详情图之后，底部下单栏之前 ========= -->
+<div style="margin:20px 16px;padding:12px;background:#f8f8f8;border-radius:8px;border:1px solid #eee;text-align:center;">
+  <p style="margin:0;font-size:14px;color:#555;">【实验提示：请记住下面4位数字，稍后问卷需要填写以核查点击行为】</p>
+  <p style="margin:6px 0 0;font-size:22px;font-weight:bold;color:#ff4400;">2759</p>
+</div>
+
+<!-- 底部固定下单栏 -->
+<div class="bottom-buy">
+  <button class="buy-btn cart">加入购物车</button>
+  <button class="buy-btn buy" id="detailBuyBtn">立即下单</button>
+</div>
+<!-- 下单弹窗 -->
+<div class="success-mask" id="successMask">
+  <div class="success-box">
+    <div class="success-icon">✓</div>
+    <div class="success-text">下单成功！</div>
+    <button class="success-btn" id="closeSuccessBtn">继续逛逛</button>
+    <div class="success-desc">查看订单详情</div>
+  </div>
+</div>
+<script>
+const detailBuyBtn = document.getElementById('detailBuyBtn');
+const successMask = document.getElementById('successMask');
+const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+function closeModal(){
+    successMask.classList.remove('show');
+}
+detailBuyBtn.addEventListener('click', function(e){
+    e.preventDefault();
+    successMask.classList.add('show');
+});
+closeSuccessBtn.addEventListener('click', closeModal);
+successMask.addEventListener('click', function(e){
+    if(e.target === successMask){
+        closeModal();
+    }
+});
+</script>
+</body>
+</html>
