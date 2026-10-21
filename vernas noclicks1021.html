@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>直播购物模拟</title>
+<style>
+* {margin:0;padding:0;box-sizing:border-box;}
+body {
+    background:#f5f5f5;
+    font-family:微软雅黑;
+    padding-bottom:20px;
+}
+.live-wrap {
+    max-width:800px;
+    margin:0 auto;
+    background:#fff;
+    overflow:hidden;
+}
+video {width:100%;display:block;}
+
+/* ===== 常驻商品条目（精粹露） ===== */
+.product-item {
+    padding:16px;
+    background:#fff;
+}
+.product-inner {
+    display:flex;
+    gap:14px;
+    align-items:center;
+    margin-bottom:14px;
+}
+.product-img {
+    width:90px;
+    height:90px;
+    border-radius:10px;
+    object-fit:cover;
+    flex-shrink:0;
+}
+.product-text {flex:1;}
+.product-text h4 {
+    font-size:16px;
+    margin-bottom:6px;
+    line-height:1.4;
+}
+.product-text .price {
+    color:#ff4400;
+    font-weight:bold;
+    font-size:18px;
+}
+.product-btn-row {
+    display:flex;
+    gap:10px;
+}
+.product-btn {
+    flex:1;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+}
+.product-btn-detail {
+    background:#f0f0f0;
+    color:#333;
+}
+.product-btn-buy {
+    background:#ff6700;
+    color:#fff;
+}
+
+/* ===== 商品详情弹窗 ===== */
+.detail-mask {
+    position:fixed;
+    inset:0;
+    z-index:10001;
+    display:none;
+    background:rgba(0,0,0,0.6);
+}
+.detail-mask.show {display:block;}
+.detail-box {
+    width:92%;
+    max-width:780px;
+    height:90vh;
+    background:#fff;
+    border-radius:14px;
+    position:absolute;
+    left:50%;
+    bottom:2vh;
+    transform:translateX(-50%);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+.detail-top {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 16px;
+    border-bottom:1px solid #eee;
+}
+.detail-close {
+    background:#eee;
+    border:0;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    font-size:18px;
+    cursor:pointer;
+}
+.detail-iframe {
+    flex:1;
+    width:100%;
+    border:0;
+}
+
+/* ===== 下单成功弹窗 ===== */
+.success-mask{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 10002;
+    display: none;
+}
+.success-mask.show{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.success-box{
+    width: 85%;
+    max-width: 360px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 30px 25px;
+    text-align: center;
+}
+.success-icon{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #07c160;
+    color: #fff;
+    font-size:32px;
+    line-height:60px;
+    margin: 0 auto 15px;
+}
+.success-text{
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+.success-desc{
+    color: #666;
+    margin-bottom: 25px;
+}
+.success-btn{
+    width: 100%;
+    padding: 12px;
+    background: #ff6700;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="live-wrap">
+  <video id="v" controls preload="auto"
+playsinline webkit-playsinline
+x5-video-player-type="h5"
+x5-video-player-fullscreen="false"
+controlslist="nofullscreen">
+    <source src="https://live-video-exp.oss-cn-hangzhou.aliyuncs.com/vernas_fuzzy.mp4">
+    您的浏览器不支持视频播放，请更换浏览器重试
+</video>
+</div>
+
+<!-- 常驻精粹露商品条目 -->
+<div class="product-item">
+  <div class="product-inner">
+    <img class="product-img" src="https://matcha998.github.io/live-demo/vernas1.jpg">
+    <div class="product-text">
+      <h4>维娜氏焕颜精粹露紧致抗皱滋养湿敷补水保湿修护</h4>
+      <div class="price">¥199</div>
+    </div>
+  </div>
+  <div class="product-btn-row">
+    <button class="product-btn product-btn-detail" id="detailBtn">查看详情</button>
+    <button class="product-btn product-btn-buy" id="buyBtn">立即下单</button>
+  </div>
+</div>
+
+<!-- 商品详情弹窗 -->
+<div class="detail-mask" id="detailMask">
+  <div class="detail-box">
+    <div class="detail-top">
+      <span>商品完整详情</span>
+      <button class="detail-close" id="closeDetailBtn">×</button>
+    </div>
+    <iframe class="detail-iframe" src="https://Matcha998.github.io/live-demo/vernas detail 2759 1021.html"></iframe>
+  </div>
+</div>
+
+<!-- 下单成功弹窗 -->
+<div class="success-mask" id="successMask">
+  <div class="success-box">
+    <div class="success-icon">✓</div>
+    <div class="success-text">下单成功！</div>
+    <div class="success-desc">查看订单详情</div>
+    <button class="success-btn" id="closeSuccessBtn">继续逛逛</button>
+  </div>
+</div>
+
+<script>
+// 禁止视频全屏
+document.addEventListener('fullscreenchange', function(){
+    if(document.fullscreenElement){ document.exitFullscreen(); }
+});
+document.addEventListener('webkitfullscreenchange', function(){
+    if(document.webkitFullscreenElement){ document.webkitExitFullscreen(); }
+});
+
+const video = document.getElementById('v');
+const detailMask = document.getElementById('detailMask');
+const detailBtn = document.getElementById('detailBtn');
+const closeDetailBtn = document.getElementById('closeDetailBtn');
+const buyBtn = document.getElementById('buyBtn');
+const successMask = document.getElementById('successMask');
+const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+
+let hasBought = false;
+let hasReported = false;
+let detailOpenTime = null;   // 打开详情的时间
+
+/* ===== 时间埋点：是否看了详情 + 看了多久 ===== */
+function reportTime() {
+    if (hasReported) return;
+    hasReported = true;
+    const didView = detailOpenTime !== null;
+    const viewSec = didView ? Math.round((Date.now() - detailOpenTime) / 1000) : 0;
+    const data = {
+        trigger: "detail_view_log",
+        didViewDetail: didView ? 1 : 0,
+        viewDetailSec: viewSec
+    };
+    try {
+        window.parent.postMessage(data, "*");
+    } catch(e) {}
+    console.log("[detail-view]", data);
+}
+window.addEventListener('beforeunload', reportTime);
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') reportTime();
+});
+
+// 查看详情
+detailBtn.addEventListener('click', ()=>{
+    detailMask.classList.add('show');
+    if(detailOpenTime === null){
+        detailOpenTime = Date.now();
+    }
+});
+closeDetailBtn.addEventListener('click', ()=>{
+    detailMask.classList.remove('show');
+});
+detailMask.addEventListener('click', (e)=>{
+    if(e.target === detailMask){
+        detailMask.classList.remove('show');
+    }
+});
+
+// 立即下单
+buyBtn.addEventListener('click', ()=>{
+    if(!hasBought){
+        hasBought = true;
+        try {
+            window.parent.postMessage({trigger:"click_buy_btn"}, "*");
+        } catch(err) {}
+        console.log("[buy] 点击立即下单");
+    }
+    successMask.classList.add('show');
+});
+closeSuccessBtn.addEventListener('click', ()=>{
+    successMask.classList.remove('show');
+});
+successMask.addEventListener('click', (e)=>{
+    if(e.target === successMask){ successMask.classList.remove('show'); }
+});
+</script>
+</body>
+</html>
