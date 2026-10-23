@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>直播购物模拟</title>
+<style>
+* {margin:0;padding:0;box-sizing:border-box;}
+html,body {height:100%;}
+body {
+    background:#f5f5f5;
+    font-family:微软雅黑;
+    overflow:hidden;
+}
+.stage {
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f5f5f5;
+    transition:all .4s ease;
+}
+.video-main {
+    height:90vh;
+    max-width:90vw;
+    aspect-ratio:auto;
+    object-fit:contain;
+    background:transparent;
+    display:block;
+    border-radius:10px;
+}
+.stage.minimized {
+    background:transparent;
+    align-items:flex-end;
+    justify-content:flex-start;
+    padding:0;
+    pointer-events:none;
+}
+.stage.minimized .video-main {
+    pointer-events:auto;
+    width:150px;
+    max-width:30vw;
+    height:267px;
+    aspect-ratio:auto;
+    object-fit:contain;
+    background:#000;
+    border-radius:10px;
+    box-shadow:0 4px 20px #0006;
+    position:fixed;
+    left:12px;
+    bottom:12px;
+    z-index:50;
+}
+.detail-panel {
+    position:fixed;
+    top:0;
+    right:0;
+    width:calc(100% - 180px);
+    height:100vh;
+    background:#fff;
+    display:flex;
+    flex-direction:column;
+    opacity:0;
+    transform:translateX(30px);
+    transition:all .4s ease;
+    pointer-events:none;
+    z-index:10;
+}
+.detail-panel.show {
+    opacity:1;
+    transform:translateX(0);
+    pointer-events:auto;
+}
+.detail-header {
+    padding:14px 20px;
+    background:#fff;
+    border-bottom:1px solid #eee;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.detail-header h3 {
+    font-size:16px;
+    color:#333;
+}
+.detail-iframe {
+    flex:1;
+    width:100%;
+    border:0;
+}
+.success-mask{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 10002;
+    display: none;
+}
+.success-mask.show{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.success-box{
+    width: 85%;
+    max-width: 360px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 30px 25px;
+    text-align: center;
+}
+.success-icon{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #07c160;
+    color: #fff;
+    font-size:32px;
+    line-height:60px;
+    margin: 0 auto 15px;
+}
+.success-text{
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+.success-desc{
+    color: #666;
+    margin-bottom: 25px;
+}
+.success-btn{
+    width: 100%;
+    padding: 12px;
+    background: #ff6700;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <video id="v" class="video-main" controls preload="auto"
+playsinline webkit-playsinline
+x5-video-player-type="h5"
+x5-video-player-fullscreen="false"
+controlslist="nofullscreen">
+    <source src="https://live-video-exp.oss-cn-hangzhou.aliyuncs.com/vernas_fuzzy.mp4">
+    您的浏览器不支持视频播放，请更换浏览器重试
+</video>
+</div>
+<div class="detail-panel" id="detailPanel">
+  <div class="detail-header">
+    <h3>维娜氏焕颜精粹露 · 商品详情</h3>
+  </div>
+  <iframe class="detail-iframe" src="https://Matcha998.github.io/live-demo/vernas detail 2759 1021.html"></iframe>
+</div>
+<div class="success-mask" id="successMask">
+  <div class="success-box">
+    <div class="success-icon">✓</div>
+    <div class="success-text">下单成功！</div>
+    <div class="success-desc">查看订单详情</div>
+    <button class="success-btn" id="closeSuccessBtn">继续逛逛</button>
+  </div>
+</div>
+<script>
+document.addEventListener('fullscreenchange', function(){
+    if(document.fullscreenElement){ document.exitFullscreen(); }
+});
+document.addEventListener('webkitfullscreenchange', function(){
+    if(document.webkitFullscreenElement){ document.webkitExitFullscreen(); }
+});
+const video = document.getElementById('v');
+const stage = document.getElementById('stage');
+const detailPanel = document.getElementById('detailPanel');
+const successMask = document.getElementById('successMask');
+const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+
+let minimized = false;
+let hasBought = false;
+let playTime = null;
+let hasReported = false;
+
+function sendLog() {
+    if (hasReported) return;
+    hasReported = true;
+    const didView = playTime !== null ? 1 : 0;
+    const viewSec = (playTime !== null && hasBought)
+        ? Math.round((Date.now() - playTime) / 1000)
+        : 0;
+    try {
+        window.parent.postMessage({
+            trigger: "detail_view_log",
+            didViewDetail: didView,
+            viewDetailSec: viewSec
+        }, "*");
+    } catch(e) {}
+    console.log("[detail-view]", {didViewDetail: didView, viewDetailSec: viewSec});
+}
+
+window.addEventListener('beforeunload', sendLog);
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') sendLog();
+});
+
+video.addEventListener('play', function(){
+    if(minimized) return;
+    minimized = true;
+    playTime = Date.now();
+    stage.classList.add('minimized');
+    detailPanel.classList.add('show');
+});
+
+window.addEventListener('message', function(e){
+    if(e.data && e.data.trigger === "inner_buy_click"){
+        if(!hasBought){
+            hasBought = true;
+            try {
+                window.parent.postMessage({trigger:"click_buy_btn"}, "*");
+            } catch(err) {}
+            sendLog();
+        }
+        successMask.classList.add('show');
+    }
+});
+
+closeSuccessBtn.addEventListener('click', ()=>{
+    successMask.classList.remove('show');
+});
+successMask.addEventListener('click', (e)=>{
+    if(e.target === successMask){ successMask.classList.remove('show'); }
+});
+</script>
+</body>
+</html>
