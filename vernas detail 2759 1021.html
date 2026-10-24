@@ -54,8 +54,17 @@ body{background:#f7f7f7;color:#222;max-width:750px;margin:0 auto;background:#fff
 .pro-name{font-size:20px;font-weight:bold;margin-bottom:8px}
 .pro-price{color:#ff4400;font-size:22px;font-weight:bold;margin:10px 0}
 .tag{display:inline-block;background:#ff6700;color:#fff;padding:3px 8px;border-radius:4px;font-size:12px;margin-right:6px}
-.module{padding:16px;border-bottom:8px solid #f5f5f5}
-.desc-img{width:100%;margin:10px 0;border-radius:8px}
+/* ========= 修改module：移除内边距、底部分割边框 ========= */
+.module{
+/* 删除原来 padding:16px; border-bottom:8px solid #f5f5f5; */
+}
+/* ========= 修改详情图片：移除上下margin，图片块级消除图片底部默认缝隙 ========= */
+.desc-img{
+width:100%;
+/* 删除 margin:10px 0 */
+border-radius:0; /* 多张拼接不要圆角，如果想要边角圆角可以改回8px */
+display:block;
+}
 .bottom-buy{position:sticky;bottom:0;background:#fff;padding:12px;display:flex;gap:10px;box-shadow:0 -2px 8px #00000010}
 .buy-btn{flex:1;padding:14px;text-align:center;border-radius:8px;text-decoration:none;font-weight:bold;border:none;cursor:pointer;font-size:16px}
 .cart{border:1px solid #ff6700;color:#ff6700;background:#fff}
@@ -139,7 +148,7 @@ body{background:#f7f7f7;color:#222;max-width:750px;margin:0 auto;background:#fff
   <span class="tag">七天无理由退货</span>
   <span class="tag">正品保障</span>
 </div>
-<!-- 全部详情图 -->
+<!-- 全部详情图 现在图片之间无缝拼接 -->
 <div class="module">
   <img class="desc-img" src="https://matcha998.github.io/live-demo/vernas5.jpg">
 </div>
